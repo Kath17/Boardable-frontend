@@ -1,0 +1,47 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  max-width: var(--width-xs, 320px);
+  margin-inline: auto;
+  gap: var(--spacing-8);
+}
+
+.logo {
+  margin-inline: auto;
+}
+
+.link-field {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.link {
+  color: var(--primary, #6d28d9);
+  font-family: Inter;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  line-height: var(--font-2xl);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2, 8px);
+}
+
+.title {
+  color: var(--foreground);
+  text-align: center;
+  font-size: var(--font-4xl);
+  font-weight: 600;
+  line-height: var(--font-4xl);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4, 16px);
+}
