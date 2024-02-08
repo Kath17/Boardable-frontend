@@ -1,0 +1,86 @@
+.form-field {
+  display: flex;
+  min-width: 9.688rem;
+  flex-direction: column;
+  gap: var(--spacing-2, 8px);
+}
+
+.board {
+  display: flex;
+  min-width: 16rem;
+  min-height: 9rem;
+  padding: var(--spacing-4, 16px);
+  flex-direction: column;
+  gap: var(--spacing-4, 16px);
+
+  justify-content: center;
+  /*align-items: center;*/
+
+  border-radius: var(--rounded-md, 6px);
+  background: #e2e8f0;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.board__title {
+  color: #171717;
+
+  /* text-lg/leading-8/semibold */
+  font-family: Inter;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px; /* 177.778% */
+}
+
+.board__color {
+  position: relative;
+}
+
+.board__bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.board__color {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+.color_gray {
+  background-color: #e2e8f0;
+}
+
+.color_red {
+  background-color: #fecaca;
+}
+
+.color_orange {
+  background-color: #fed7aa;
+}
+
+.color_yellow {
+  background-color: #fef08a;
+}
+
+.color_green {
+  background-color: #d9f99d;
+}
+
+.color_blue {
+  background-color: #bfdbfe;
+}
+
+.color_pink {
+  background-color: #fbcfe8;
+}
+
+.color_purple {
+  background-color: #ddd6fe;
+}
