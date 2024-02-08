@@ -1,0 +1,68 @@
+.header {
+  max-width: var(--width-7xl, 1280px);
+  display: flex;
+  padding: 1.688rem var(--spacing-4);
+  justify-content: space-between;
+  align-items: center;
+  margin-inline: auto;
+}
+
+.header__background {
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+  background: var(--white);
+  margin: 0px;
+}
+
+.header__title {
+  color: var(--foreground, #171717);
+  font-family: Inter;
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  line-height: var(--leading-8);
+  letter-spacing: -0.6px;
+}
+
+.logo {
+  display: flex;
+  gap: var(--spacing-4);
+  justify-content: left;
+  align-items: center;
+}
+
+.buttons {
+  display: flex;
+  gap: var(--spacing-4);
+  justify-content: right;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+}
+
+.active {
+  border-radius: 20px;
+  border: 2px solid #6090fa;
+
+  display: flex;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+}
+
+.project__name {
+  color: #1d58d8;
+
+  font-family: "Nunito";
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 24px;
+
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #1d58d8;
+}
