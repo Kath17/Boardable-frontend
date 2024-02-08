@@ -1,0 +1,7 @@
+.boards__list {
+  display: flex;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 32px var(--spacing-8, 32px);
+  flex-wrap: wrap;
+}
