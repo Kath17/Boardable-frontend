@@ -73,20 +73,79 @@ function SingleBoard() {
 
   const cards = useLoaderData();
   const [showEdit, setShowEdit] = React.useState(false);
+  const [isBeingEdited, setIsBeingEdited] = React.useState(false);
+  const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
+  let [title, setTitle] = React.useState("My Board Title");
+  let [originalTitle, setOriginalTitle] = React.useState("My Board Title");
+
+  React.useEffect(() => {
+    setOriginalTitle(originalTitle);
+  }, [originalTitle]);
 
   function handlerClickEdit() {
     setShowEdit(!showEdit);
   }
 
+  function handleChangeTitle(e) {
+    const newTitle = e.target.value;
+    setTitle(newTitle);
+  }
+
+  function handlerEdit() {
+    setIsBeingEdited(!isBeingEdited);
+    setShowEdit(!showEdit);
+  }
+
+  function handlerDelete() {
+    setIsBeingDeleted(true);
+  }
+
+  function handlerCancel() {
+    setIsBeingDeleted(false);
+    setIsBeingEdited(false);
+    setShowEdit(!showEdit);
+    setTitle(originalTitle);
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setIsBeingEdited(false);
+      setTitle(e.target.value);
+      setOriginalTitle(e.target.value);
+    }
+  }
+
+  console.log("isBeingDeleted: ", isBeingDeleted);
+
   return (
     <div className={s.content}>
       <div className={s.title}>
-        <h1 className={s.title__text}>My Board title</h1>
+        {isBeingEdited ? (
+          <input
+            id="board-title"
+            type="text"
+            className={s.title__text}
+            placeholder={"Ingrese un título"}
+            value={title}
+            onChange={handleChangeTitle}
+            onKeyDown={handleKeyPress}
+          />
+        ) : (
+          <h1 className={s.title__text}>{title}</h1>
+        )}
         <div className={s["position-relative"]}>
           <div className={s.title__points} onClick={handlerClickEdit}>
             {svgPoints}
           </div>
-          {showEdit && <PopUpEdit id={1} />}
+          {showEdit && (
+            <PopUpEdit
+              isBeingEdited={isBeingEdited}
+              handlerDelete={handlerDelete}
+              handlerEdit={handlerEdit}
+              handlerCancel={handlerCancel}
+            />
+          )}
         </div>
       </div>
       <CardsList>

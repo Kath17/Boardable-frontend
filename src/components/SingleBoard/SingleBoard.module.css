@@ -34,13 +34,26 @@
   flex-direction: row;
   gap: var(--spacing-4);
   align-items: center;
+  justify-content: flex-start;
+  height: var(--leading-8);
+  width: fit-content;
 }
 
 .title__text {
+  width: auto;
   color: #171717;
   font-family: Inter;
   font-size: var(--font-2xl);
   font-weight: 700;
+  line-height: var(--leading-8);
+  position: relative;
+}
+
+.title__text::placeholder {
+  color: #171717;
+  font-family: Inter;
+  font-size: var(--font-sm);
+  font-weight: 300;
   line-height: var(--leading-8);
   position: relative;
 }
