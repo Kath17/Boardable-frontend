@@ -1,19 +1,8 @@
 /* eslint-disable react/prop-types */
-
-import Card from "../Card/Card";
 import s from "./CardsList.module.css";
 
-function BoardsList() {
-  return (
-    <div className={s.cards__list}>
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-    </div>
-  );
+function BoardsList({ children }) {
+  return <div className={s.cards__list}>{children}</div>;
 }
 
 export default BoardsList;

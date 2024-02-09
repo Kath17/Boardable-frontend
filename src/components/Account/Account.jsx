@@ -13,8 +13,8 @@ function Account() {
           <input type="text" id="username" placeholder="testino" />
         </div>
         <div className={s["form-field"]}>
-          <label htmlFor="password">Name</label>
-          <input type="text" id="password" />
+          <label htmlFor="name">Name</label>
+          <input type="text" id="name" />
         </div>
         <div className={s["form-field"]}>
           <label htmlFor="email">Email</label>

@@ -13,6 +13,8 @@
   position: absolute;
   right: -36px;
   bottom: -70px;
+
+  z-index: 1;
 }
 
 .card__text {

@@ -3,8 +3,10 @@ import clsx from "clsx";
 import s from "./Card.module.css";
 import Button from "../Button/Button";
 import CardEdit from "../CardEdit";
+import { useState } from "react";
+import CardItem from "../CardItem/CardItem";
 
-function Card() {
+export default function Card({ card }) {
   const svgPoints = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -37,46 +39,53 @@ function Card() {
     </svg>
   );
 
+  const list = card.list;
+  const [showEdit, setShowEdit] = useState(false);
+  const [showAddCard, setShowAddCard] = useState(false);
+
+  function handlerClickEdit() {
+    setShowEdit(!showEdit);
+  }
+
+  function handlerAddCard() {
+    setShowAddCard(!showAddCard);
+  }
+
   return (
     <div className={s.card}>
       <div className={clsx(s.card__slot, s["padding-inline"])}>
-        <h1 className={s.card__title}>To do</h1>
-        <div className={s.relative}>
+        <h1 className={s.card__title}>{card.title}</h1>
+        <div className={s.relative} onClick={handlerClickEdit}>
           {svgPoints}
-          <CardEdit />
+          {showEdit && <CardEdit id={1} />}
         </div>
       </div>
-      <div className={s.card__content}>
-        <div className={s.card__slot}>
-          <p className={s.card__text}>Mi primera tarjeta</p>
-          {svgPoints}
+      {list.map((item) => {
+        return <CardItem key={item.id} item={item} />;
+      })}
+
+      {showAddCard && (
+        <div className={s.card__content}>
+          <div className={s["form-field"]}>
+            <label htmlFor="card-title">Card Title</label>
+            <input type="text" id="card-title" />
+          </div>
+          <div className={s.card__buttons}>
+            <Button size="sm">Add card</Button>
+            <Button onClick={handlerAddCard} size="sm" variant="secondary">
+              Cancel
+            </Button>
+          </div>
         </div>
-      </div>
-      <div className={s.card__content}>
-        <div className={s["form-field"]}>
-          <label htmlFor="card-title">Card Title</label>
-          <input type="text" id="card-title" />
+      )}
+      {!showAddCard && (
+        <div
+          onClick={handlerAddCard}
+          className={clsx(s["padding-inline"], s["padding-block"])}
+        >
+          + Add a card
         </div>
-        <div className={s.card__buttons}>
-          <Button size="sm">Add card</Button>
-          <Button size="sm" variant="secondary">
-            Cancel
-          </Button>
-        </div>
-      </div>
-      <div className={clsx(s["padding-inline"], s["padding-block"])}>
-        + Add a card
-      </div>
-      {/* 
-      <div className={s["form-field"]}>
-        <label htmlFor="card-title">List Title</label>
-        <input type="text" id="card-title" />
-      </div>
-      <div className={s.card__buttons}>
-        <Button size="sm">Create new list</Button>
-      </div> */}
+      )}
     </div>
   );
 }
-
-export default Card;
