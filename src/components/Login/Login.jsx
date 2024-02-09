@@ -1,9 +1,40 @@
-/* eslint-disable no-unused-vars, react/no-unknown-property */
-import * as React from "react";
 import s from "./Login.module.css";
 import Button from "../Button/Button";
+import {
+  Form,
+  redirect,
+  useActionData,
+  useLocation,
+  useNavigation,
+} from "react-router-dom";
+import { authProvider } from "../../auth";
 
-function Login() {
+async function action({ request }) {
+  let formData = await request.formData();
+  let username = formData.get("username");
+  let password = formData.get("password");
+
+  try {
+    await authProvider.login(username, password);
+  } catch (error) {
+    return {
+      error: "Invalid login attempt",
+    };
+  }
+
+  let redirectTo = formData.get("redirectTo");
+  return redirect(redirectTo || "/");
+}
+
+export default function Login() {
+  const actionData = useActionData();
+  const navigation = useNavigation();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTo = searchParams.get("from");
+
+  const isSubmitting = navigation.state === "submitting";
+
   return (
     <div className={s.content}>
       <div className={s.logo}>
@@ -33,17 +64,21 @@ function Login() {
         </svg>
       </div>
       <h1 className={s.title}>Welcome to Boardable</h1>
-      <form className={s.form}>
+      <Form className={s.form} method="POST">
+        {redirectTo && (
+          <input type="hidden" name="redirectTo" value={redirectTo} />
+        )}
         <div className={s["form-field"]}>
           <label htmlFor="username">Username</label>
           <input type="text" id="username" />
         </div>
         <div className={s["form-field"]}>
           <label htmlFor="password">Password</label>
-          <input type="text" id="password" />
+          <input type="password" id="password" />
         </div>
-        <Button>Login</Button>
-      </form>
+        <Button type="submit">{isSubmitting ? "Entering..." : "Enter"}</Button>
+        {actionData?.error && <p className={s.error}>{actionData.error}</p>}
+      </Form>
       <div className={s["link-field"]}>
         <a className={s.link}>Create an account</a>
         <svg
@@ -56,9 +91,9 @@ function Login() {
           <path
             d="M3.33331 7.99998H12.6666M12.6666 7.99998L7.99998 3.33331M12.6666 7.99998L7.99998 12.6666"
             stroke="#6D28D9"
-            stroke-width="1.33"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="1.33"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </div>
@@ -66,4 +101,4 @@ function Login() {
   );
 }
 
-export default Login;
+Login.action = action;

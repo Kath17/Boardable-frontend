@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars, react/no-unknown-property */
-import * as React from "react";
 import s from "./Signup.module.css";
 import Button from "../Button/Button";
 
@@ -56,9 +54,9 @@ function Signup() {
           <path
             d="M3.33331 7.99998H12.6666M12.6666 7.99998L7.99998 3.33331M12.6666 7.99998L7.99998 12.6666"
             stroke="#6D28D9"
-            stroke-width="1.33"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="1.33"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </div>
