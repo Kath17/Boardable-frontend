@@ -18,7 +18,16 @@ async function loader() {
 }
 
 export default function MyBoards() {
-  const boards = useLoaderData();
+  //const boards = useLoaderData();
+  const [boards, setBoards] = React.useState([]);
+
+  let urlGet = `/api/Kat1/boards`;
+
+  React.useEffect(() => {
+    fetch(urlGet)
+      .then((response) => response.json())
+      .then((data) => setBoards(data.boards));
+  }, []);
 
   return (
     <div className={s.content}>
@@ -33,7 +42,7 @@ export default function MyBoards() {
         </div>
       </div>
       <BoardsList>
-        <BoardInput />
+        <BoardInput setBoards={setBoards} />
         {boards.map((board) => {
           return <Board key={board.id} board={board} />;
         })}
