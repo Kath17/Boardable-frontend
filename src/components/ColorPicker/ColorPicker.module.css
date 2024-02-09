@@ -5,8 +5,8 @@
   grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: 4px;
 
-  bottom: -70px;
-  right: -48px;
+  bottom: -80px;
+  right: -40px;
   width: 120px;
   min-width: var(--spacing-24, 96px);
   padding: var(--spacing-2, 8px);
@@ -26,34 +26,38 @@
   list-style-type: none;
 }
 
-.color_gray {
-  background-color: #e2e8f0;
+.position-relative {
+  position: relative;
 }
 
-.color_red {
-  background-color: #fecaca;
+.color_E2E8F0 {
+  background: #e2e8f0;
 }
 
-.color_orange {
-  background-color: #fed7aa;
+.color_FECACA {
+  background: #fecaca;
 }
 
-.color_yellow {
+.color_FED7AA {
+  background: #fed7aa;
+}
+
+.color_FEF08A {
   background-color: #fef08a;
 }
 
-.color_green {
+.color_D9F99D {
   background-color: #d9f99d;
 }
 
-.color_blue {
+.color_BFDBFE {
   background-color: #bfdbfe;
 }
 
-.color_pink {
+.color_FBCFE8 {
   background-color: #fbcfe8;
 }
 
-.color_purple {
+.color_DDD6FE {
   background-color: #ddd6fe;
 }

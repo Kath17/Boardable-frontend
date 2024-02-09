@@ -14,12 +14,10 @@
   gap: var(--spacing-4, 16px);
 
   justify-content: center;
-  align-items: center;
+  /*align-items: center;*/
 
   border-radius: var(--rounded-md, 6px);
-  /*background: #e2e8f0;*/
-
-  text-decoration: none;
+  background: #e2e8f0;
 }
 
 .align-center {

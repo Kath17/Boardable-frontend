@@ -1,49 +1,58 @@
 /* eslint-disable react/prop-types */
+import clsx from "clsx";
 import s from "./ColorPicker.module.css";
 
-function ColorPicker() {
+const colors = [
+  "#e2e8f0",
+  "#fecaca",
+  "#fed7aa",
+  "#fef08a",
+  "#d9f99d",
+  "#bfdbfe",
+  "#fbcfe8",
+  "#ddd6fe",
+];
+
+function ColorPicker({ setColor, id }) {
   function handlerPickColor(color) {
     console.log(color);
-    //setColor(color);
+    setColor(color);
+
+    //const newColor = { color: color };
+
+    if (id !== "") {
+      //   console.log(id);
+      //   let optionsPatch = {
+      //     method: "PATCH",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify(newColor),
+      //   };
+      //   fetch(url, optionsPatch)
+      //     .then((response) => response.json)
+      //     .then(() => handleUpdate());
+    }
   }
 
   return (
-    // <div className={s.picker__container}>
-    <ul className={s.picker__container}>
-      <li
-        onClick={() => handlerPickColor("#e2e8f0")}
-        className={s.picker__color}
-      ></li>
-      <li
-        onClick={() => handlerPickColor("#fecaca")}
-        className={s.picker__color}
-      ></li>
-      <li
-        onClick={() => handlerPickColor("#fed7aa")}
-        className={s.picker__color}
-      ></li>
-      <li
-        onClick={() => handlerPickColor("#fef08a")}
-        className={s.picker__color}
-      ></li>
-      <li
-        onClick={() => handlerPickColor("#d9f99d")}
-        className={s.picker__color}
-      ></li>{" "}
-      <li
-        onClick={() => handlerPickColor("#bfdbfe")}
-        className={s.picker__color}
-      ></li>
-      <li
-        onClick={() => handlerPickColor("#fbcfe8")}
-        className={s.picker__color}
-      ></li>
-      <li
-        onClick={() => handlerPickColor("#ddd6fe")}
-        className={s.picker__color}
-      ></li>
-    </ul>
-    // </div>
+    <div className={s["position-relative"]}>
+      <ul className={s.picker__container}>
+        {colors.map((color) => (
+          // eslint-disable-next-line react/jsx-key
+          <li
+            key={color}
+            onClick={() => handlerPickColor(color)}
+            className={clsx(
+              {
+                [s[`color_${color.substring(1).toUpperCase()}`]]: color,
+              },
+              s.picker__color
+            )}
+          ></li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
