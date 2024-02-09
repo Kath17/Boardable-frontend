@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import * as React from "react";
 import clsx from "clsx";
 import s from "./Card.module.css";
 import Button from "../Button/Button";
@@ -42,6 +43,16 @@ export default function Card({ card }) {
   const list = card.list;
   const [showEdit, setShowEdit] = useState(false);
   const [showAddCard, setShowAddCard] = useState(false);
+  const [isBeingEdited, setIsBeingEdited] = React.useState(false);
+  const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
+  let [cardTitle, setCardTitle] = React.useState(card.title);
+  let [originalTitle, setOriginalTitle] = React.useState(card.title);
+
+  console.log("isBeingDeleted: ", isBeingDeleted);
+
+  React.useEffect(() => {
+    setOriginalTitle(originalTitle);
+  }, [originalTitle]);
 
   function handlerClickEdit() {
     setShowEdit(!showEdit);
@@ -51,15 +62,66 @@ export default function Card({ card }) {
     setShowAddCard(!showAddCard);
   }
 
+  function handlerEdit() {
+    setIsBeingEdited(!isBeingEdited);
+    setShowEdit(!showEdit);
+  }
+
+  function handleChangeTitle(e) {
+    const newTitle = e.target.value;
+    setCardTitle(newTitle);
+  }
+
+  function handlerDelete() {
+    setIsBeingDeleted(true);
+  }
+
+  function handlerCancel() {
+    setIsBeingDeleted(false);
+    setIsBeingEdited(false);
+    setShowEdit(!showEdit);
+    setCardTitle(originalTitle);
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setIsBeingEdited(false);
+      setCardTitle(e.target.value);
+      setOriginalTitle(e.target.value);
+    }
+  }
+
   return (
     <div className={s.card}>
-      <div className={clsx(s.card__slot, s["padding-inline"])}>
-        <h1 className={s.card__title}>{card.title}</h1>
+      <div className={clsx(s.card__slot, s["padding-right"])}>
+        {isBeingEdited ? (
+          <input
+            id="board-title"
+            type="text"
+            className={s.card__title}
+            placeholder={"Ingrese un título"}
+            value={cardTitle}
+            onChange={handleChangeTitle}
+            onKeyDown={handleKeyPress}
+          />
+        ) : (
+          <h1 className={clsx(s.card__title, s["padding-left"])}>
+            {cardTitle}
+          </h1>
+        )}
         <div className={s["position-relative"]}>
           <div className={s.card__points} onClick={handlerClickEdit}>
             {svgPoints}
           </div>
-          {showEdit && <PopUpEdit />}
+          {showEdit && (
+            <PopUpEdit
+              isBeingEdited={isBeingEdited}
+              handlerDelete={handlerDelete}
+              handlerEdit={handlerEdit}
+              handlerCancel={handlerCancel}
+            />
+          )}
         </div>
       </div>
       {list.map((item) => {
