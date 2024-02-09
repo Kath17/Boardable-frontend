@@ -43,7 +43,13 @@ function BoardInput() {
             <p>Color</p>
             {svgColor}
           </div>
-          {showColor && <ColorPicker setColor={setColor} id={1} />}
+          {showColor && (
+            <ColorPicker
+              setColor={setColor}
+              setShowColorPicker={setShowColor}
+              id={1}
+            />
+          )}
         </div>
         <Button size="sm">Create</Button>
       </div>

@@ -24,6 +24,7 @@
   background-color: cadetblue;
   border-radius: 9999px;
   list-style-type: none;
+  cursor: pointer;
 }
 
 .position-relative {

@@ -13,10 +13,10 @@ const colors = [
   "#ddd6fe",
 ];
 
-function ColorPicker({ setColor, id }) {
+function ColorPicker({ setColor, setShowColorPicker, id }) {
   function handlerPickColor(color) {
     setColor(color);
-
+    setShowColorPicker(false);
     //const newColor = { color: color };
 
     if (id !== "") {
