@@ -4,31 +4,44 @@ import App from "./components/App";
 import Login from "./components/Login";
 import MyBoards from "./components/MyBoards";
 import Signup from "./components/Signup";
-import SingleBoard from "./components/SingleBoard";
+import { action as logoutAction } from "./routes/logout";
+import SingleBoard from "./components/SingleBoard/SingleBoard";
 
 export const router = createBrowserRouter([
   {
+    id: "app",
     path: "/",
     element: <App />,
+    loader: App.loader,
+    action: App.action,
+    children: [
+      {
+        index: true,
+        element: <MyBoards />,
+        loader: MyBoards.loader,
+      },
+      {
+        path: "/boards",
+        element: <SingleBoard />,
+        loader: SingleBoard.loader,
+      },
+    ],
   },
   {
     path: "/login",
     element: <Login />,
+    action: Login.action,
+  },
+  {
+    path: "/logout",
+    action: logoutAction,
   },
   {
     path: "/signup",
     element: <Signup />,
   },
   {
-    path: "/",
-    element: <MyBoards />,
-  },
-  {
     path: "/account",
     element: <Account />,
-  },
-  {
-    path: "/boards",
-    element: <SingleBoard />,
   },
 ]);
