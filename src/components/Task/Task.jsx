@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 
-import CardEdit from "../CardEdit";
-import s from "./CardItem.module.css";
+import PopUpEdit from "../PopUpEdit";
+import s from "./Task.module.css";
 import { useState } from "react";
 
-function CardItem({ item }) {
+function Task({ item }) {
   const svgPoints = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -46,13 +46,15 @@ function CardItem({ item }) {
     <div className={s.card__content}>
       <div className={s.card__slot}>
         <p className={s.card__text}>{item.body}</p>
-        <div className={s["position-relative"]} onClick={handlerClickEdit}>
-          {svgPoints}
-          {showEdit && <CardEdit id={1} />}
+        <div className={s["position-relative"]}>
+          <div className={s.card__points} onClick={handlerClickEdit}>
+            {svgPoints}
+          </div>
+          {showEdit && <PopUpEdit id={1} />}
         </div>
       </div>
     </div>
   );
 }
 
-export default CardItem;
+export default Task;

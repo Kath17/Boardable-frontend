@@ -12,7 +12,7 @@
 
   position: absolute;
   right: -36px;
-  bottom: -70px;
+  bottom: -60px;
 
   z-index: 1;
 }
@@ -24,5 +24,7 @@
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
+
+  cursor: pointer;
 }
