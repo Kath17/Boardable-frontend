@@ -3,19 +3,23 @@ import * as React from "react";
 import s from "./MyBoards.module.css";
 import Board from "../Board/Board";
 import BoardsList from "../BoardsList/BoardsList";
+import { useLoaderData } from "react-router-dom";
+import BoardInput from "../BoardInput";
 
-const navigation = [
-  {
-    name: "Color Game",
-    to: "/color-game",
-  },
-  {
-    name: "Doable",
-    to: "/doable",
-  },
-];
+async function loader() {
+  return [
+    { id: 1, title: "Board 1", color: "#fef08a" },
+    { id: 2, title: "Board 2", color: "#fecaca" },
+    { id: 3, title: "Board 3", color: "#e2e8f0" },
+    { id: 4, title: "Board 4", color: "#ddd6fe" },
+    { id: 5, title: "Board 5", color: "#bfdbfe" },
+    { id: 6, title: "Board 6", color: "#fbcfe8" },
+  ];
+}
 
-function MyBoards() {
+export default function MyBoards() {
+  const boards = useLoaderData();
+
   return (
     <div className={s.content}>
       <div>
@@ -29,12 +33,13 @@ function MyBoards() {
         </div>
       </div>
       <BoardsList>
-        <Board />
-        <Board />
-        <Board />
+        <BoardInput />
+        {boards.map((board) => {
+          return <Board key={board.id} board={board} />;
+        })}
       </BoardsList>
     </div>
   );
 }
 
-export default MyBoards;
+MyBoards.loader = loader;
