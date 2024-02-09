@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-
+import * as React from "react";
 import PopUpEdit from "../PopUpEdit";
 import s from "./Task.module.css";
 import { useState } from "react";
@@ -37,20 +37,75 @@ function Task({ item }) {
     </svg>
   );
   const [showEdit, setShowEdit] = useState(false);
+  const [isBeingEdited, setIsBeingEdited] = React.useState(false);
+  const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
+  let [taskContent, setTaskContent] = React.useState(item.body);
+  let [originalContent, setOriginalContent] = React.useState(item.body);
+
+  console.log("isBeingDeleted: ", isBeingDeleted);
 
   function handlerClickEdit() {
     setShowEdit(!showEdit);
   }
 
+  function handlerEdit() {
+    setIsBeingEdited(!isBeingEdited);
+    setShowEdit(!showEdit);
+  }
+
+  function handlerDelete() {
+    setIsBeingDeleted(true);
+  }
+
+  function handlerCancel() {
+    setIsBeingDeleted(false);
+    setIsBeingEdited(false);
+    setShowEdit(!showEdit);
+    setTaskContent(originalContent);
+  }
+
+  function handleChangeContent(e) {
+    const newContent = e.target.value;
+    setTaskContent(newContent);
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setIsBeingEdited(false);
+      setTaskContent(e.target.value);
+      setOriginalContent(e.target.value);
+    }
+  }
+
   return (
     <div className={s.card__content}>
       <div className={s.card__slot}>
-        <p className={s.card__text}>{item.body}</p>
+        {isBeingEdited ? (
+          <input
+            id="board-title"
+            type="text"
+            className={s.card__text}
+            placeholder={"Nuevo contenido"}
+            value={taskContent}
+            onChange={handleChangeContent}
+            onKeyDown={handleKeyPress}
+          />
+        ) : (
+          <p className={s.card__text}>{taskContent}</p>
+        )}
         <div className={s["position-relative"]}>
           <div className={s.card__points} onClick={handlerClickEdit}>
             {svgPoints}
           </div>
-          {showEdit && <PopUpEdit id={1} />}
+          {showEdit && (
+            <PopUpEdit
+              isBeingEdited={isBeingEdited}
+              handlerDelete={handlerDelete}
+              handlerEdit={handlerEdit}
+              handlerCancel={handlerCancel}
+            />
+          )}
         </div>
       </div>
     </div>

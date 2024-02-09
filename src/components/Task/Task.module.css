@@ -23,6 +23,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  gap: var(--spacing-2, 8px);
 }
 
 .padding-inline {
