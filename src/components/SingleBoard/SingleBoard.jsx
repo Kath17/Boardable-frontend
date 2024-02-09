@@ -2,7 +2,7 @@ import * as React from "react";
 import s from "./SingleBoard.module.css";
 import Card from "../Card";
 import CardsList from "../CardsList";
-import CardEdit from "../CardEdit";
+import PopUpEdit from "../PopUpEdit";
 import Button from "../Button";
 import { useLoaderData } from "react-router-dom";
 
@@ -82,9 +82,11 @@ function SingleBoard() {
     <div className={s.content}>
       <div className={s.title}>
         <h1 className={s.title__text}>My Board title</h1>
-        <div className={s["position-relative"]} onClick={handlerClickEdit}>
-          {svgPoints}
-          {showEdit && <CardEdit id={1} />}
+        <div className={s["position-relative"]}>
+          <div className={s.title__points} onClick={handlerClickEdit}>
+            {svgPoints}
+          </div>
+          {showEdit && <PopUpEdit id={1} />}
         </div>
       </div>
       <CardsList>

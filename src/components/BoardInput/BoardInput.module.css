@@ -35,8 +35,12 @@
   line-height: 32px; /* 177.778% */
 }
 
-.board__color {
+.position-relative {
   position: relative;
+}
+
+.board__color {
+  cursor: pointer;
 }
 
 .board__bottom {

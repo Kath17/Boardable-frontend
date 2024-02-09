@@ -38,9 +38,11 @@ function BoardInput() {
         <input type="text" id="title" />
       </div>
       <div className={s.board__bottom}>
-        <div className={s.board__color} onClick={handlerClickColor}>
-          <p>Color</p>
-          {svgColor}
+        <div className={s["position-relative"]}>
+          <div className={s.board__color} onClick={handlerClickColor}>
+            <p>Color</p>
+            {svgColor}
+          </div>
           {showColor && <ColorPicker setColor={setColor} id={1} />}
         </div>
         <Button size="sm">Create</Button>

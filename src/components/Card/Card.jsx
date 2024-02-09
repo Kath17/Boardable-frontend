@@ -2,9 +2,9 @@
 import clsx from "clsx";
 import s from "./Card.module.css";
 import Button from "../Button/Button";
-import CardEdit from "../CardEdit";
+import PopUpEdit from "../PopUpEdit";
 import { useState } from "react";
-import CardItem from "../CardItem/CardItem";
+import Task from "../Task/Task";
 
 export default function Card({ card }) {
   const svgPoints = (
@@ -55,13 +55,15 @@ export default function Card({ card }) {
     <div className={s.card}>
       <div className={clsx(s.card__slot, s["padding-inline"])}>
         <h1 className={s.card__title}>{card.title}</h1>
-        <div className={s.relative} onClick={handlerClickEdit}>
-          {svgPoints}
-          {showEdit && <CardEdit id={1} />}
+        <div className={s["position-relative"]}>
+          <div className={s.card__points} onClick={handlerClickEdit}>
+            {svgPoints}
+          </div>
+          {showEdit && <PopUpEdit />}
         </div>
       </div>
       {list.map((item) => {
-        return <CardItem key={item.id} item={item} />;
+        return <Task key={item.id} item={item} />;
       })}
 
       {showAddCard && (
@@ -81,7 +83,7 @@ export default function Card({ card }) {
       {!showAddCard && (
         <div
           onClick={handlerAddCard}
-          className={clsx(s["padding-inline"], s["padding-block"])}
+          className={clsx(s["padding-inline"], s["card__add-button"])}
         >
           + Add a card
         </div>

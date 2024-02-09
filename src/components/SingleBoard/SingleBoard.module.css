@@ -9,6 +9,10 @@
   background-color: #fecaca;
 }
 
+.title__points {
+  cursor: pointer;
+}
+
 .position-relative {
   position: relative;
 }

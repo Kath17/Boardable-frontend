@@ -15,7 +15,6 @@ const colors = [
 
 function ColorPicker({ setColor, id }) {
   function handlerPickColor(color) {
-    console.log(color);
     setColor(color);
 
     //const newColor = { color: color };
@@ -36,23 +35,20 @@ function ColorPicker({ setColor, id }) {
   }
 
   return (
-    <div className={s["position-relative"]}>
-      <ul className={s.picker__container}>
-        {colors.map((color) => (
-          // eslint-disable-next-line react/jsx-key
-          <li
-            key={color}
-            onClick={() => handlerPickColor(color)}
-            className={clsx(
-              {
-                [s[`color_${color.substring(1).toUpperCase()}`]]: color,
-              },
-              s.picker__color
-            )}
-          ></li>
-        ))}
-      </ul>
-    </div>
+    <ul className={s.picker__container}>
+      {colors.map((color) => (
+        <li
+          key={color}
+          onClick={() => handlerPickColor(color)}
+          className={clsx(
+            {
+              [s[`color_${color.substring(1).toUpperCase()}`]]: color,
+            },
+            s.picker__color
+          )}
+        ></li>
+      ))}
+    </ul>
   );
 }
 
