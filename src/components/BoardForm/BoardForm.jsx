@@ -2,10 +2,10 @@
 import * as React from "react";
 import Button from "../Button/Button";
 import ColorPicker from "../ColorPicker/ColorPicker";
-import s from "./BoardInput.module.css";
+import s from "./BoardForm.module.css";
 import clsx from "clsx";
 
-function BoardInput({ setBoards }) {
+function BoardForm({ setCurrrentBoards }) {
   const svgColor = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +29,7 @@ function BoardInput({ setBoards }) {
   function handleUpdate() {
     fetch(urlGet)
       .then((response) => response.json())
-      .then((data) => setBoards(data.boards));
+      .then((data) => setCurrrentBoards(data.boards));
     setColor("#e2e8f0");
   }
 
@@ -96,4 +96,4 @@ function BoardInput({ setBoards }) {
   );
 }
 
-export default BoardInput;
+export default BoardForm;
