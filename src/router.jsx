@@ -5,7 +5,7 @@ import Login from "./components/Login";
 import MyBoards from "./components/MyBoards";
 import Signup from "./components/Signup";
 import { action as logoutAction } from "./routes/logout";
-import SingleBoard from "./components/SingleBoard/SingleBoard";
+import BoardPage from "./components/BoardPage/BoardPage";
 
 export const router = createBrowserRouter([
   {
@@ -23,8 +23,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "/boards/:boardId",
-        element: <SingleBoard />,
-        loader: SingleBoard.loader,
+        element: <BoardPage />,
+        loader: BoardPage.loader,
       },
     ],
   },

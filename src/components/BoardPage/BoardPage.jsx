@@ -1,44 +1,28 @@
 import * as React from "react";
-import s from "./SingleBoard.module.css";
+import s from "./BoardPage.module.css";
 import Card from "../Card";
-import CardsList from "../CardsList";
 import PopUpEdit from "../PopUpEdit";
-import Button from "../Button";
 import { useLoaderData } from "react-router-dom";
+import CardForm from "../CardForm";
 
 async function loader() {
-  return [
-    {
-      id: 1,
-      title: "To do",
-      list: [{ id: 1, body: "Mi otra tarjeta" }],
-    },
-    {
-      id: 2,
-      title: "Doing",
-      list: [
-        { id: 2, body: "Mi primera tarjeta" },
-        { id: 3, body: "Mi segunda tarjeta" },
-        { id: 4, body: "Mi tercera tarjeta" },
-      ],
-    },
-    {
-      id: 3,
-      title: "Done",
-      list: [
-        { id: 5, body: "Mi primera tarjeta" },
-        { id: 6, body: "Mi segunda tarjeta" },
-      ],
-    },
-    {
-      id: 4,
-      title: "New List",
-      list: [{ id: 7, body: "Mi primera tarjeta" }],
-    },
-  ];
+  let urlGetCards = `/api/Kat2/boards/1/cards`;
+  let urlGetBoard = `/api/Kat2/boards/1`;
+
+  const [cardsResponse, boardResponse] = await Promise.all([
+    fetch(urlGetCards),
+    fetch(urlGetBoard),
+  ]);
+
+  const [cardsData, boardData] = await Promise.all([
+    cardsResponse.json(),
+    boardResponse.json(),
+  ]);
+
+  return { cards: cardsData.cards, boardTitle: boardData.board.title };
 }
 
-function SingleBoard() {
+export default function BoardPage() {
   const svgPoints = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -71,25 +55,19 @@ function SingleBoard() {
     </svg>
   );
 
-  const cards = useLoaderData();
+  const { cards, boardTitle } = useLoaderData();
+
+  const [currentCards, setCurrrentCards] = React.useState(cards);
+  const [title, setTitle] = React.useState(boardTitle);
+  const [originalTitle, setOriginalTitle] = React.useState(boardTitle);
+
   const [showEdit, setShowEdit] = React.useState(false);
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
   const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
-  let [title, setTitle] = React.useState("My Board Title");
-  let [originalTitle, setOriginalTitle] = React.useState("My Board Title");
 
   React.useEffect(() => {
     setOriginalTitle(originalTitle);
   }, [originalTitle]);
-
-  function handlerClickEdit() {
-    setShowEdit(!showEdit);
-  }
-
-  function handleChangeTitle(e) {
-    const newTitle = e.target.value;
-    setTitle(newTitle);
-  }
 
   function handlerEdit() {
     setIsBeingEdited(!isBeingEdited);
@@ -116,8 +94,6 @@ function SingleBoard() {
     }
   }
 
-  console.log("isBeingDeleted: ", isBeingDeleted);
-
   return (
     <div className={s.content}>
       <div className={s.title}>
@@ -128,14 +104,21 @@ function SingleBoard() {
             className={s.title__text}
             placeholder={"Ingrese un título"}
             value={title}
-            onChange={handleChangeTitle}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
             onKeyDown={handleKeyPress}
           />
         ) : (
           <h1 className={s.title__text}>{title}</h1>
         )}
         <div className={s["position-relative"]}>
-          <div className={s.title__points} onClick={handlerClickEdit}>
+          <div
+            className={s.title__points}
+            onClick={() => {
+              setShowEdit(!showEdit);
+            }}
+          >
             {svgPoints}
           </div>
           {showEdit && (
@@ -148,25 +131,14 @@ function SingleBoard() {
           )}
         </div>
       </div>
-      <CardsList>
-        {cards.map((card) => (
+      <div className={s.cards__list}>
+        {currentCards.map((card) => (
           <Card key={card.id} card={card} />
         ))}
-
-        <div className={s.card}>
-          <div className={s["form-field"]}>
-            <label htmlFor="card-title">List Title</label>
-            <input type="text" id="card-title" />
-          </div>
-          <div className={s.card__buttons}>
-            <Button size="sm">Create new list</Button>
-          </div>
-        </div>
-      </CardsList>
+        <CardForm setCurrrentCards={setCurrrentCards} />
+      </div>
     </div>
   );
 }
 
-export default SingleBoard;
-
-SingleBoard.loader = loader;
+BoardPage.loader = loader;
