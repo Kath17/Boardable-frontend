@@ -39,8 +39,8 @@ function Task({ item }) {
   const [showEdit, setShowEdit] = useState(false);
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
   const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
-  let [taskContent, setTaskContent] = React.useState(item.body);
-  let [originalContent, setOriginalContent] = React.useState(item.body);
+  let [taskContent, setTaskContent] = React.useState(item.task);
+  let [originalContent, setOriginalContent] = React.useState(item.task);
 
   console.log("isBeingDeleted: ", isBeingDeleted);
 

@@ -65,9 +65,7 @@ export default function BoardPage() {
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
   const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
 
-  React.useEffect(() => {
-    setOriginalTitle(originalTitle);
-  }, [originalTitle]);
+  console.log("isBeingDeleted: ", isBeingDeleted);
 
   function handlerEdit() {
     setIsBeingEdited(!isBeingEdited);

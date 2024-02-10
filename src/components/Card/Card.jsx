@@ -2,10 +2,9 @@
 import * as React from "react";
 import clsx from "clsx";
 import s from "./Card.module.css";
-import Button from "../Button/Button";
 import PopUpEdit from "../PopUpEdit";
-import { useState } from "react";
 import Task from "../Task/Task";
+import TaskForm from "../TaskForm";
 
 export default function Card({ card }) {
   const svgPoints = (
@@ -40,49 +39,26 @@ export default function Card({ card }) {
     </svg>
   );
 
-  const list = [
-    {
-      id: 1,
-      body: "Task 1",
-    },
-    {
-      id: 2,
-      body: "Task 2",
-    },
-    {
-      id: 3,
-      body: "Task 3",
-    },
-  ];
-  const [showEdit, setShowEdit] = useState(false);
-  const [showAddCard, setShowAddCard] = useState(false);
+  const [tasks, setTasks] = React.useState([]);
+  const [showEdit, setShowEdit] = React.useState(false);
+
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
   const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
   let [cardTitle, setCardTitle] = React.useState(card.title);
   let [originalTitle, setOriginalTitle] = React.useState(card.title);
 
-  console.log("isBeingDeleted: ", isBeingDeleted);
-
   React.useEffect(() => {
-    setOriginalTitle(originalTitle);
-  }, [originalTitle]);
-
-  function handlerClickEdit() {
-    setShowEdit(!showEdit);
-  }
-
-  function handlerAddCard() {
-    setShowAddCard(!showAddCard);
-  }
+    let urlGetTasks = `/api/Kat2/boards/1/cards/1/tasks`;
+    fetch(urlGetTasks)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => setTasks(data.tasks));
+  }, []);
 
   function handlerEdit() {
     setIsBeingEdited(!isBeingEdited);
     setShowEdit(!showEdit);
-  }
-
-  function handleChangeTitle(e) {
-    const newTitle = e.target.value;
-    setCardTitle(newTitle);
   }
 
   function handlerDelete() {
@@ -115,7 +91,7 @@ export default function Card({ card }) {
             className={s.card__title}
             placeholder={"Ingrese un título"}
             value={cardTitle}
-            onChange={handleChangeTitle}
+            onChange={() => setCardTitle(e.target.value)}
             onKeyDown={handleKeyPress}
           />
         ) : (
@@ -124,7 +100,10 @@ export default function Card({ card }) {
           </h1>
         )}
         <div className={s["position-relative"]}>
-          <div className={s.card__points} onClick={handlerClickEdit}>
+          <div
+            className={s.card__points}
+            onClick={() => setShowEdit(!showEdit)}
+          >
             {svgPoints}
           </div>
           {showEdit && (
@@ -137,32 +116,10 @@ export default function Card({ card }) {
           )}
         </div>
       </div>
-      {list.map((item) => {
+      {tasks.map((item) => {
         return <Task key={item.id} item={item} />;
       })}
-
-      {showAddCard && (
-        <div className={s.card__content}>
-          <div className={s["form-field"]}>
-            <label htmlFor="card-title">Card Title</label>
-            <input type="text" id="card-title" />
-          </div>
-          <div className={s.card__buttons}>
-            <Button size="sm">Add card</Button>
-            <Button onClick={handlerAddCard} size="sm" variant="secondary">
-              Cancel
-            </Button>
-          </div>
-        </div>
-      )}
-      {!showAddCard && (
-        <div
-          onClick={handlerAddCard}
-          className={clsx(s["padding-inline"], s["card__add-button"])}
-        >
-          + Add a card
-        </div>
-      )}
+      <TaskForm setTasks={setTasks} />
     </div>
   );
 }
