@@ -5,7 +5,7 @@ const savedToken = window.localStorage.getItem(tokenKey);
 export const authProvider = {
   isAuthenticated: savedToken !== null,
   token: savedToken,
-  /*
+
   async login(username, password) {
     const url = URL_BASE + "/login";
     const options = {
@@ -26,21 +26,8 @@ export const authProvider = {
       const error = await response.json();
       throw new Error(error);
     }
-  }, */
-
-  login(username, password) {
-    const body = {
-      token: "kat_key" + password,
-      user: {
-        id: 1,
-        username: username,
-        email: "kat@gmail.com",
-      },
-    };
-    authProvider.isAuthenticated = true;
-    authProvider.token = body.token;
-    window.localStorage.setItem(tokenKey, body.token);
   },
+
   logout() {
     window.localStorage.removeItem(tokenKey);
 

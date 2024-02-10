@@ -70,13 +70,28 @@ export default function Login() {
         )}
         <div className={s["form-field"]}>
           <label htmlFor="username">Username</label>
-          <input type="text" id="username" />
+          <input
+            type="text"
+            id="username"
+            placeholder="username"
+            name="username"
+            required
+            disabled={isSubmitting}
+          />
         </div>
         <div className={s["form-field"]}>
           <label htmlFor="password">Password</label>
-          <input type="password" id="password" />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            disabled={isSubmitting}
+          />
         </div>
-        <Button type="submit">{isSubmitting ? "Entering..." : "Enter"}</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Entering..." : "Enter"}
+        </Button>
         {actionData?.error && <p className={s.error}>{actionData.error}</p>}
       </Form>
       <div className={s["link-field"]}>
