@@ -2,32 +2,38 @@
 import * as React from "react";
 import s from "./MyBoards.module.css";
 import Board from "../Board/Board";
-import BoardsList from "../BoardsList/BoardsList";
+
 import { useLoaderData } from "react-router-dom";
-import BoardInput from "../BoardInput";
+import BoardForm from "../BoardForm";
 
 async function loader() {
-  return [
-    { id: 1, title: "Board 1", color: "#fef08a" },
-    { id: 2, title: "Board 2", color: "#fecaca" },
-    { id: 3, title: "Board 3", color: "#e2e8f0" },
-    { id: 4, title: "Board 4", color: "#ddd6fe" },
-    { id: 5, title: "Board 5", color: "#bfdbfe" },
-    { id: 6, title: "Board 6", color: "#fbcfe8" },
-  ];
+  let urlGetBoards = `/api/Kat1/boards`;
+  const response = await fetch(urlGetBoards);
+  const data = await response.json();
+  return data.boards;
 }
 
 export default function MyBoards() {
-  //const boards = useLoaderData();
-  const [boards, setBoards] = React.useState([]);
+  const boards = useLoaderData();
+  const [currentBoards, setCurrrentBoards] = React.useState(boards);
 
-  let urlGet = `/api/Kat1/boards`;
+  function handleSortByChange(e) {
+    let boardsCopy = [...currentBoards];
 
-  React.useEffect(() => {
-    fetch(urlGet)
-      .then((response) => response.json())
-      .then((data) => setBoards(data.boards));
-  }, []);
+    if (e.target.value === "title") {
+      boardsCopy.sort((a, b) => {
+        const titleA = a.title.toLowerCase();
+        const titleB = b.title.toLowerCase();
+        return titleA.localeCompare(titleB);
+      });
+    } else if (e.target.value === "date") {
+      boardsCopy.sort((a, b) => {
+        return new Date(a.created_date) - new Date(b.created_date);
+      });
+    }
+
+    setCurrrentBoards(boardsCopy);
+  }
 
   return (
     <div className={s.content}>
@@ -35,18 +41,18 @@ export default function MyBoards() {
         <h1 className={s.title}>My Boards</h1>
         <div className={s["form-field"]}>
           <label htmlFor="select">Sort By</label>
-          <select type="text" id="select">
+          <select type="text" id="select" onChange={handleSortByChange}>
             <option value="date">Created date</option>
             <option value="title">By title</option>
           </select>
         </div>
       </div>
-      <BoardsList>
-        <BoardInput setBoards={setBoards} />
-        {boards.map((board) => {
+      <div className={s.boards__list}>
+        <BoardForm setCurrrentBoards={setCurrrentBoards} />
+        {currentBoards.map((board) => {
           return <Board key={board.id} board={board} />;
         })}
-      </BoardsList>
+      </div>
     </div>
   );
 }

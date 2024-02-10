@@ -8,9 +8,7 @@ import { router } from "./router";
 
 ReactDOM.createRoot(document.getElementById("root")).render([
   // eslint-disable-next-line react/jsx-key
-  <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  </React.StrictMode>,
+  <AuthProvider>
+    <RouterProvider router={router} />
+  </AuthProvider>,
 ]);

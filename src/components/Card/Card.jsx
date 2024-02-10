@@ -40,7 +40,20 @@ export default function Card({ card }) {
     </svg>
   );
 
-  const list = card.list;
+  const list = [
+    {
+      id: 1,
+      body: "Task 1",
+    },
+    {
+      id: 2,
+      body: "Task 2",
+    },
+    {
+      id: 3,
+      body: "Task 3",
+    },
+  ];
   const [showEdit, setShowEdit] = useState(false);
   const [showAddCard, setShowAddCard] = useState(false);
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
