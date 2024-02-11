@@ -106,47 +106,50 @@ export default function BoardPage() {
   }
 
   return (
-    <div className={s.content}>
-      <div className={s.title}>
-        {isBeingEdited ? (
-          <input
-            id="board-title"
-            type="text"
-            className={s.title__text}
-            placeholder={"Ingrese un título"}
-            value={boardTitle}
-            onChange={(e) => {
-              setBoardTitle(e.target.value);
-            }}
-            onKeyDown={handleEditBoardTitle}
-          />
-        ) : (
-          <h1 className={s.title__text}>{boardTitle}</h1>
-        )}
-        <div className={s["position-relative"]}>
-          <div
-            className={s.title__points}
-            onClick={() => {
-              setShowEdit(!showEdit);
-            }}
-          >
-            {svgPoints}
-          </div>
-          {showEdit && (
-            <PopUpEdit
-              isBeingEdited={isBeingEdited}
-              handlerDelete={handlerDelete}
-              handlerEdit={handlerEdit}
-              handlerCancel={handlerCancel}
+    <div
+      className={s["content-board"]}
+      style={{ backgroundColor: board.color }}
+    >
+      <div className={s.content}>
+        <div className={s.title}>
+          {isBeingEdited ? (
+            <input
+              id="board-title"
+              type="text"
+              className={s.title__text}
+              placeholder={"Ingrese un título"}
+              value={boardTitle}
+              onChange={(e) => setBoardTitle(e.target.value)}
+              onKeyDown={handleEditBoardTitle}
             />
+          ) : (
+            <h1 className={s.title__text}>{boardTitle}</h1>
           )}
+          <div className={s["position-relative"]}>
+            <div
+              className={s.title__points}
+              onClick={() => {
+                setShowEdit(!showEdit);
+              }}
+            >
+              {svgPoints}
+            </div>
+            {showEdit && (
+              <PopUpEdit
+                isBeingEdited={isBeingEdited}
+                handlerDelete={handlerDelete}
+                handlerEdit={handlerEdit}
+                handlerCancel={handlerCancel}
+              />
+            )}
+          </div>
         </div>
-      </div>
-      <div className={s.cards__list}>
-        {currentCards.map((card) => (
-          <Card key={card.id} card={card} boardId={board.id} />
-        ))}
-        <CardForm setCurrrentCards={setCurrrentCards} boardId={board.id} />
+        <div className={s.cards__list}>
+          {currentCards.map((card) => (
+            <Card key={card.id} card={card} boardId={board.id} />
+          ))}
+          <CardForm setCurrrentCards={setCurrrentCards} boardId={board.id} />
+        </div>
       </div>
     </div>
   );

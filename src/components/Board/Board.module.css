@@ -17,8 +17,6 @@
   align-items: center;
 
   border-radius: var(--rounded-md, 6px);
-  /*background: #e2e8f0;*/
-
   text-decoration: none;
 }
 
@@ -29,12 +27,11 @@
 .board__title {
   color: #171717;
 
-  /* text-lg/leading-8/semibold */
   font-family: Inter;
   font-size: 18px;
   font-style: normal;
   font-weight: 600;
-  line-height: 32px; /* 177.778% */
+  line-height: 32px;
 }
 
 .board__color {

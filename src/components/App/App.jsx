@@ -35,7 +35,8 @@ export default function App() {
   const actionData = useActionData();
 
   return (
-    <div className={s.container}>
+    // <div className={s.container}>
+    <div>
       <Header />
       <main className={s.main}>
         <Outlet context={actionData?.error} />
