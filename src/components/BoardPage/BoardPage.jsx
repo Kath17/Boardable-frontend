@@ -74,9 +74,6 @@ export default function BoardPage() {
 
   const [showEdit, setShowEdit] = React.useState(false);
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
-  const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
-
-  console.log("isBeingDeleted: ", isBeingDeleted);
 
   function handlerEdit() {
     setIsBeingEdited(!isBeingEdited);
@@ -84,14 +81,12 @@ export default function BoardPage() {
   }
 
   function handlerCancel() {
-    setIsBeingDeleted(false);
     setIsBeingEdited(false);
     setShowEdit(!showEdit);
     setBoardTitle(originalTitle);
   }
 
   async function handlerDelete() {
-    setIsBeingDeleted(true);
     await deleteBoard(username, board.id);
     navigate("/");
     navigate(0);
