@@ -28,6 +28,28 @@ export const authProvider = {
     }
   },
 
+  async updateUser(userData, username) {
+    const url = URL_BASE + `/update/${username}`;
+    const token = window.localStorage.getItem(tokenKey);
+
+    const options = {
+      method: "PATCH",
+      body: JSON.stringify(userData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${token}`,
+      },
+    };
+
+    const response = await fetch(url, options);
+    if (response.ok) {
+      authProvider.isAuthenticated = true;
+    } else {
+      const error = await response.json();
+      throw new Error(error);
+    }
+  },
+
   async signup(username, password) {
     const url = URL_BASE + "/signup";
     const options = {
