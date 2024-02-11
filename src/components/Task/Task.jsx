@@ -39,11 +39,8 @@ function Task({ item }) {
 
   const [showEdit, setShowEdit] = useState(false);
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
-  const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
   let [taskContent, setTaskContent] = React.useState(item.task);
   let [originalContent, setOriginalContent] = React.useState(item.task);
-
-  console.log("isBeingDeleted: ", isBeingDeleted);
 
   function handlerClickEdit() {
     setShowEdit(!showEdit);
@@ -54,12 +51,9 @@ function Task({ item }) {
     setShowEdit(!showEdit);
   }
 
-  function handlerDelete() {
-    setIsBeingDeleted(true);
-  }
+  function handlerDelete() {}
 
   function handlerCancel() {
-    setIsBeingDeleted(false);
     setIsBeingEdited(false);
     setShowEdit(!showEdit);
     setTaskContent(originalContent);

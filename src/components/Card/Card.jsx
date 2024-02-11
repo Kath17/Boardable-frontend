@@ -5,8 +5,9 @@ import s from "./Card.module.css";
 import PopUpEdit from "../PopUpEdit";
 import Task from "../Task/Task";
 import TaskForm from "../TaskForm";
-import { useRouteLoaderData } from "react-router-dom";
+import { useNavigate, useRouteLoaderData } from "react-router-dom";
 import { getTasks } from "../../services/tasks";
+import { deleteCard, updateCard } from "../../services/cards";
 
 export default function Card({ card, boardId }) {
   const svgPoints = (
@@ -41,12 +42,12 @@ export default function Card({ card, boardId }) {
     </svg>
   );
   const { username } = useRouteLoaderData("app");
+  const navigate = useNavigate();
 
   const [tasks, setTasks] = React.useState([]);
   const [showEdit, setShowEdit] = React.useState(false);
 
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
-  const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
   let [cardTitle, setCardTitle] = React.useState(card.title);
   let [originalTitle, setOriginalTitle] = React.useState(card.title);
 
@@ -68,23 +69,26 @@ export default function Card({ card, boardId }) {
     setShowEdit(!showEdit);
   }
 
-  function handlerDelete() {
-    setIsBeingDeleted(true);
-  }
-
   function handlerCancel() {
-    setIsBeingDeleted(false);
     setIsBeingEdited(false);
     setShowEdit(!showEdit);
     setCardTitle(originalTitle);
   }
 
-  function handleKeyPress(e) {
+  async function handlerDelete() {
+    await deleteCard(username, boardId, card.id);
+    navigate(0);
+  }
+
+  async function handleEditCardTitle(e) {
     if (e.key === "Enter") {
       e.preventDefault();
       setIsBeingEdited(false);
       setCardTitle(e.target.value);
       setOriginalTitle(e.target.value);
+
+      const cardData = { title: cardTitle };
+      await updateCard(cardData, username, boardId, card.id);
     }
   }
 
@@ -93,13 +97,13 @@ export default function Card({ card, boardId }) {
       <div className={clsx(s.card__slot, s["padding-right"])}>
         {isBeingEdited ? (
           <input
-            id="board-title"
+            id="card-title"
             type="text"
             className={s.card__title}
             placeholder={"Ingrese un título"}
             value={cardTitle}
             onChange={(e) => setCardTitle(e.target.value)}
-            onKeyDown={handleKeyPress}
+            onKeyDown={handleEditCardTitle}
           />
         ) : (
           <h1 className={clsx(s.card__title, s["padding-left"])}>
