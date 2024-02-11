@@ -4,6 +4,8 @@ import Button from "../Button/Button";
 import ColorPicker from "../ColorPicker/ColorPicker";
 import s from "./BoardForm.module.css";
 import clsx from "clsx";
+import { createBoard, getBoards } from "../../services/boards";
+import { useRouteLoaderData } from "react-router-dom";
 
 function BoardForm({ setCurrrentBoards }) {
   const svgColor = (
@@ -18,39 +20,26 @@ function BoardForm({ setCurrrentBoards }) {
     </svg>
   );
 
+  const { username } = useRouteLoaderData("app");
+
   const [color, setColor] = React.useState("#e2e8f0");
   const [showColor, setShowColor] = React.useState(false);
   const [title, setTitle] = React.useState("");
 
   const colorBoard = color.substring(1).toUpperCase();
 
-  let urlGet = `/api/Kat1/boards`;
-
-  function handleUpdate() {
-    fetch(urlGet)
-      .then((response) => response.json())
-      .then((data) => setCurrrentBoards(data.boards));
+  async function handleUpdate() {
+    const boards = await getBoards(username);
+    setCurrrentBoards(boards);
     setColor("#e2e8f0");
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    const boardData = { title, color };
+    await createBoard(boardData, username);
 
-    const newBoard = { title, color };
-    console.log(newBoard);
-
-    let options = {
-      method: "POST",
-      body: JSON.stringify(newBoard),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    fetch(urlGet, options)
-      .then((response) => response.json())
-      .then(() => handleUpdate());
-
+    handleUpdate();
     setTitle("");
   }
 

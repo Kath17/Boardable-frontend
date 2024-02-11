@@ -71,7 +71,7 @@ export async function createBoard(boardData, username) {
 
   if (response.ok) {
     const body = await response.json();
-    return body.data;
+    return body.boards;
   }
 
   if (response.status === 401) {
