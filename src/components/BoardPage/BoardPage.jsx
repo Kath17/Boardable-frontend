@@ -135,7 +135,7 @@ export default function BoardPage() {
       </div>
       <div className={s.cards__list}>
         {currentCards.map((card) => (
-          <Card key={card.id} card={card} />
+          <Card key={card.id} card={card} boardId={board.id} />
         ))}
         <CardForm setCurrrentCards={setCurrrentCards} boardId={board.id} />
       </div>

@@ -5,8 +5,10 @@ import s from "./Card.module.css";
 import PopUpEdit from "../PopUpEdit";
 import Task from "../Task/Task";
 import TaskForm from "../TaskForm";
+import { useRouteLoaderData } from "react-router-dom";
+import { getTasks } from "../../services/tasks";
 
-export default function Card({ card }) {
+export default function Card({ card, boardId }) {
   const svgPoints = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -38,6 +40,7 @@ export default function Card({ card }) {
       />
     </svg>
   );
+  const { username } = useRouteLoaderData("app");
 
   const [tasks, setTasks] = React.useState([]);
   const [showEdit, setShowEdit] = React.useState(false);
@@ -48,13 +51,17 @@ export default function Card({ card }) {
   let [originalTitle, setOriginalTitle] = React.useState(card.title);
 
   React.useEffect(() => {
-    let urlGetTasks = `/api/Kat2/boards/1/cards/1/tasks`;
-    fetch(urlGetTasks)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => setTasks(data.tasks));
-  }, []);
+    const fetchData = async () => {
+      try {
+        const tasks = await getTasks(username, boardId, card.id);
+        setTasks(tasks);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchData();
+  }, [username, boardId, card.id]);
 
   function handlerEdit() {
     setIsBeingEdited(!isBeingEdited);
@@ -91,7 +98,7 @@ export default function Card({ card }) {
             className={s.card__title}
             placeholder={"Ingrese un título"}
             value={cardTitle}
-            onChange={() => setCardTitle(e.target.value)}
+            onChange={(e) => setCardTitle(e.target.value)}
             onKeyDown={handleKeyPress}
           />
         ) : (
@@ -119,7 +126,7 @@ export default function Card({ card }) {
       {tasks.map((item) => {
         return <Task key={item.id} item={item} />;
       })}
-      <TaskForm setTasks={setTasks} />
+      <TaskForm setTasks={setTasks} boardId={boardId} cardId={card.id} />
     </div>
   );
 }

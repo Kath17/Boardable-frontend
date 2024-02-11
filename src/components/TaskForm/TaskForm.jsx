@@ -2,34 +2,26 @@
 import * as React from "react";
 import Button from "../Button/Button";
 import s from "./TaskForm.module.css";
+import { createTask, getTasks } from "../../services/tasks";
+import { useRouteLoaderData } from "react-router-dom";
 
-function TaskForm({ setTasks }) {
+function TaskForm({ setTasks, boardId, cardId }) {
+  const { username } = useRouteLoaderData("app");
+
   const [task, setTask] = React.useState("");
   const [showAddCard, setShowAddCard] = React.useState(false);
-  let urlGetTasks = `/api/Kat2/boards/1/cards/1/tasks`;
 
-  function handleUpdate() {
-    fetch(urlGetTasks)
-      .then((response) => response.json())
-      .then((data) => setTasks(data.tasks));
+  async function handleUpdate() {
+    const tasks = await getTasks(username, boardId, cardId);
+    setTasks(tasks);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const newTask = { task };
+    await createTask(newTask, username, boardId, cardId);
 
-    let options = {
-      method: "POST",
-      body: JSON.stringify(newTask),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    fetch(urlGetTasks, options)
-      .then((response) => response.json())
-      .then(() => handleUpdate());
-
+    handleUpdate();
     setTask("");
     setShowAddCard(false);
   }

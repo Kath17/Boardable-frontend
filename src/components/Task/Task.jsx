@@ -36,6 +36,7 @@ function Task({ item }) {
       />
     </svg>
   );
+
   const [showEdit, setShowEdit] = useState(false);
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
   const [isBeingDeleted, setIsBeingDeleted] = React.useState(false);
