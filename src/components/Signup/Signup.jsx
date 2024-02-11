@@ -1,7 +1,41 @@
 import s from "./Signup.module.css";
 import Button from "../Button/Button";
+import {
+  Form,
+  Link,
+  redirect,
+  useActionData,
+  useLocation,
+  useNavigation,
+} from "react-router-dom";
+import { authProvider } from "../../auth";
 
-function Signup() {
+async function action({ request }) {
+  let formData = await request.formData();
+  let username = formData.get("username");
+  let password = formData.get("password");
+
+  try {
+    await authProvider.signup(username, password);
+  } catch (error) {
+    return {
+      error: "Username is already in use",
+    };
+  }
+
+  let redirectTo = formData.get("redirectTo");
+  return redirect(redirectTo || "/");
+}
+
+export default function Signup() {
+  const actionData = useActionData();
+  const navigation = useNavigation();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTo = searchParams.get("from");
+
+  const isSubmitting = navigation.state === "submitting";
+
   return (
     <div className={s.content}>
       <div className={s.logo}>
@@ -31,19 +65,38 @@ function Signup() {
         </svg>
       </div>
       <h1 className={s.title}>Welcome to Boardable</h1>
-      <form className={s.form}>
+      <Form className={s.form} method="POST">
+        {redirectTo && (
+          <input type="hidden" name="redirectTo" value={redirectTo} />
+        )}
         <div className={s["form-field"]}>
           <label htmlFor="username">Username</label>
-          <input type="text" id="username" />
+          <input
+            type="text"
+            id="username"
+            placeholder="username"
+            name="username"
+            required
+            disabled={isSubmitting}
+          />
         </div>
         <div className={s["form-field"]}>
           <label htmlFor="password">Password</label>
-          <input type="text" id="password" />
+          <input
+            type="text"
+            id="password"
+            name="password"
+            required
+            disabled={isSubmitting}
+          />
         </div>
-        <Button>Signup</Button>
-      </form>
-      <div className={s["link-field"]}>
-        <a className={s.link}>Login to your account</a>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Signing..." : "Sign Up"}
+        </Button>
+        {actionData?.error && <p className={s.error}>{actionData.error}</p>}
+      </Form>
+      <Link to="/login" className={s["link-field"]}>
+        <div className={s.link}>Login to your account</div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -59,9 +112,9 @@ function Signup() {
             strokeLinejoin="round"
           />
         </svg>
-      </div>
+      </Link>
     </div>
   );
 }
 
-export default Signup;
+Signup.action = action;

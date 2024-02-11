@@ -2,6 +2,7 @@ import s from "./Login.module.css";
 import Button from "../Button/Button";
 import {
   Form,
+  Link,
   redirect,
   useActionData,
   useLocation,
@@ -94,8 +95,8 @@ export default function Login() {
         </Button>
         {actionData?.error && <p className={s.error}>{actionData.error}</p>}
       </Form>
-      <div className={s["link-field"]}>
-        <a className={s.link}>Create an account</a>
+      <Link to="/signup" className={s["link-field"]}>
+        <div className={s.link}>Create an account</div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -111,7 +112,7 @@ export default function Login() {
             strokeLinejoin="round"
           />
         </svg>
-      </div>
+      </Link>
     </div>
   );
 }
