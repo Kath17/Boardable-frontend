@@ -82,3 +82,60 @@ export async function createBoard(boardData, username) {
   const body = await response.json();
   return Promise.reject(new Error(body.error));
 }
+
+export async function updateBoard(boardData, username, board_id) {
+  const url = `${URL_BASE}/${username}/boards/${board_id}`;
+  const token = window.localStorage.getItem(tokenKey);
+
+  const options = {
+    method: "PATCH",
+    body: JSON.stringify(boardData),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `bearer ${token}`,
+    },
+  };
+
+  const response = await fetch(url, options);
+
+  if (response.ok) {
+    const body = await response.json();
+    return body.board;
+  }
+
+  if (response.status === 401) {
+    authProvider.logout();
+    throw redirect("/login");
+  }
+
+  const body = await response.json();
+  return Promise.reject(new Error(body.error));
+}
+
+export async function deleteBoard(username, board_id) {
+  const url = `${URL_BASE}/${username}/boards/${board_id}`;
+  const token = window.localStorage.getItem(tokenKey);
+
+  const options = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `bearer ${token}`,
+    },
+  };
+
+  const response = await fetch(url, options);
+
+  if (response.ok) {
+    const body = await response.json();
+    return body.ok;
+  }
+
+  if (response.status === 401) {
+    authProvider.logout();
+    throw redirect("/login");
+  }
+
+  const body = await response.json();
+  return Promise.reject(new Error(body.error));
+}

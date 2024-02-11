@@ -2,11 +2,16 @@ import * as React from "react";
 import s from "./BoardPage.module.css";
 import Card from "../Card";
 import PopUpEdit from "../PopUpEdit";
-import { redirect, useLoaderData } from "react-router-dom";
+import {
+  redirect,
+  useLoaderData,
+  useNavigate,
+  useRouteLoaderData,
+} from "react-router-dom";
 import CardForm from "../CardForm";
 import { authProvider } from "../../auth";
 import { getCards } from "../../services/cards";
-import { getBoard } from "../../services/boards";
+import { deleteBoard, getBoard, updateBoard } from "../../services/boards";
 
 async function loader({ request }) {
   const url = new URL(request.url);
@@ -60,9 +65,11 @@ export default function BoardPage() {
   );
 
   const { cards, board } = useLoaderData();
+  const { username } = useRouteLoaderData("app");
+  const navigate = useNavigate();
 
   const [currentCards, setCurrrentCards] = React.useState(cards);
-  const [title, setTitle] = React.useState(board.title);
+  const [boardTitle, setBoardTitle] = React.useState(board.title);
   const [originalTitle, setOriginalTitle] = React.useState(board.title);
 
   const [showEdit, setShowEdit] = React.useState(false);
@@ -76,23 +83,30 @@ export default function BoardPage() {
     setShowEdit(!showEdit);
   }
 
-  function handlerDelete() {
-    setIsBeingDeleted(true);
-  }
-
   function handlerCancel() {
     setIsBeingDeleted(false);
     setIsBeingEdited(false);
     setShowEdit(!showEdit);
-    setTitle(originalTitle);
+    setBoardTitle(originalTitle);
   }
 
-  function handleKeyPress(e) {
+  async function handlerDelete() {
+    setIsBeingDeleted(true);
+    await deleteBoard(username, board.id);
+    navigate("/");
+    navigate(0);
+  }
+
+  async function handleEditBoardTitle(e) {
     if (e.key === "Enter") {
       e.preventDefault();
       setIsBeingEdited(false);
-      setTitle(e.target.value);
+      setBoardTitle(e.target.value);
       setOriginalTitle(e.target.value);
+      navigate(0);
+
+      const boardData = { title: boardTitle };
+      await updateBoard(boardData, username, board.id);
     }
   }
 
@@ -105,14 +119,14 @@ export default function BoardPage() {
             type="text"
             className={s.title__text}
             placeholder={"Ingrese un título"}
-            value={title}
+            value={boardTitle}
             onChange={(e) => {
-              setTitle(e.target.value);
+              setBoardTitle(e.target.value);
             }}
-            onKeyDown={handleKeyPress}
+            onKeyDown={handleEditBoardTitle}
           />
         ) : (
-          <h1 className={s.title__text}>{title}</h1>
+          <h1 className={s.title__text}>{boardTitle}</h1>
         )}
         <div className={s["position-relative"]}>
           <div
