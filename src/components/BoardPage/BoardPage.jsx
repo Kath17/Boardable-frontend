@@ -23,7 +23,7 @@ async function loader({ request }) {
   const cards = await getCards(username, boardId);
   const board = await getBoard(username, boardId);
 
-  return { cards, boardTitle: board.title };
+  return { cards, board };
 }
 
 export default function BoardPage() {
@@ -59,11 +59,11 @@ export default function BoardPage() {
     </svg>
   );
 
-  const { cards, boardTitle } = useLoaderData();
+  const { cards, board } = useLoaderData();
 
   const [currentCards, setCurrrentCards] = React.useState(cards);
-  const [title, setTitle] = React.useState(boardTitle);
-  const [originalTitle, setOriginalTitle] = React.useState(boardTitle);
+  const [title, setTitle] = React.useState(board.title);
+  const [originalTitle, setOriginalTitle] = React.useState(board.title);
 
   const [showEdit, setShowEdit] = React.useState(false);
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
@@ -137,7 +137,7 @@ export default function BoardPage() {
         {currentCards.map((card) => (
           <Card key={card.id} card={card} />
         ))}
-        <CardForm setCurrrentCards={setCurrrentCards} />
+        <CardForm setCurrrentCards={setCurrrentCards} boardId={board.id} />
       </div>
     </div>
   );

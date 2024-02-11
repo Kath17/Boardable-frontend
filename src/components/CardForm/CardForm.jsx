@@ -2,35 +2,24 @@
 import * as React from "react";
 import Button from "../Button/Button";
 import s from "./CardForm.module.css";
+import { useRouteLoaderData } from "react-router-dom";
+import { createCard, getCards } from "../../services/cards";
 
-function CardForm({ setCurrrentCards }) {
+function CardForm({ setCurrrentCards, boardId }) {
+  const { username } = useRouteLoaderData("app");
   const [title, setTitle] = React.useState("");
 
-  function handleUpdate() {
-    let urlGetCards = `/api/Kat2/boards/1/cards`;
-    fetch(urlGetCards)
-      .then((response) => response.json())
-      .then((data) => setCurrrentCards(data.cards));
+  async function handleUpdate() {
+    const cards = await getCards(username, boardId);
+    setCurrrentCards(cards);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    const bodyCard = { title };
+    await createCard(bodyCard, username, boardId);
 
-    const newCard = { title };
-
-    let urlGetCards = `/api/Kat2/boards/1/cards`;
-    let options = {
-      method: "POST",
-      body: JSON.stringify(newCard),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    fetch(urlGetCards, options)
-      .then((response) => response.json())
-      .then(() => handleUpdate());
-
+    handleUpdate();
     setTitle("");
   }
 

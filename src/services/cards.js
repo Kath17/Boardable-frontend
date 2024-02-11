@@ -45,7 +45,7 @@ export async function createCard(cardData, username, boardId) {
 
   if (response.ok) {
     const body = await response.json();
-    return body.cards;
+    return body.card;
   }
 
   if (response.status === 401) {
