@@ -3,18 +3,11 @@ import * as React from "react";
 import s from "./MyBoards.module.css";
 import Board from "../Board/Board";
 
-import { useLoaderData } from "react-router-dom";
+import { useRouteLoaderData } from "react-router-dom";
 import BoardForm from "../BoardForm";
 
-async function loader() {
-  let urlGetBoards = `/api/Kat1/boards`;
-  const response = await fetch(urlGetBoards);
-  const data = await response.json();
-  return data.boards;
-}
-
 export default function MyBoards() {
-  const boards = useLoaderData();
+  const { boards } = useRouteLoaderData("app");
   const [currentBoards, setCurrrentBoards] = React.useState(boards);
 
   function handleSortByChange(e) {
@@ -56,5 +49,3 @@ export default function MyBoards() {
     </div>
   );
 }
-
-MyBoards.loader = loader;
