@@ -128,7 +128,9 @@ export default function Card({ card, boardId }) {
         </div>
       </div>
       {tasks.map((item) => {
-        return <Task key={item.id} item={item} />;
+        return (
+          <Task key={item.id} item={item} boardId={boardId} cardId={card.id} />
+        );
       })}
       <TaskForm setTasks={setTasks} boardId={boardId} cardId={card.id} />
     </div>

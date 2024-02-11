@@ -3,8 +3,10 @@ import * as React from "react";
 import PopUpEdit from "../PopUpEdit";
 import s from "./Task.module.css";
 import { useState } from "react";
+import { useNavigate, useRouteLoaderData } from "react-router-dom";
+import { deleteTask, updateTask } from "../../services/tasks";
 
-function Task({ item }) {
+function Task({ item, boardId, cardId }) {
   const svgPoints = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -37,21 +39,18 @@ function Task({ item }) {
     </svg>
   );
 
+  const { username } = useRouteLoaderData("app");
+  const navigate = useNavigate();
+
   const [showEdit, setShowEdit] = useState(false);
   const [isBeingEdited, setIsBeingEdited] = React.useState(false);
   let [taskContent, setTaskContent] = React.useState(item.task);
   let [originalContent, setOriginalContent] = React.useState(item.task);
 
-  function handlerClickEdit() {
-    setShowEdit(!showEdit);
-  }
-
   function handlerEdit() {
     setIsBeingEdited(!isBeingEdited);
     setShowEdit(!showEdit);
   }
-
-  function handlerDelete() {}
 
   function handlerCancel() {
     setIsBeingEdited(false);
@@ -59,17 +58,20 @@ function Task({ item }) {
     setTaskContent(originalContent);
   }
 
-  function handleChangeContent(e) {
-    const newContent = e.target.value;
-    setTaskContent(newContent);
+  async function handlerDelete() {
+    await deleteTask(username, boardId, cardId, item.id);
+    navigate(0);
   }
 
-  function handleKeyPress(e) {
+  async function handleEditTaskContent(e) {
     if (e.key === "Enter") {
       e.preventDefault();
       setIsBeingEdited(false);
       setTaskContent(e.target.value);
       setOriginalContent(e.target.value);
+
+      const taskData = { task: taskContent };
+      await updateTask(taskData, username, boardId, cardId, item.id);
     }
   }
 
@@ -83,14 +85,17 @@ function Task({ item }) {
             className={s.card__text}
             placeholder={"Nuevo contenido"}
             value={taskContent}
-            onChange={handleChangeContent}
-            onKeyDown={handleKeyPress}
+            onChange={(e) => setTaskContent(e.target.value)}
+            onKeyDown={handleEditTaskContent}
           />
         ) : (
           <p className={s.card__text}>{taskContent}</p>
         )}
         <div className={s["position-relative"]}>
-          <div className={s.card__points} onClick={handlerClickEdit}>
+          <div
+            className={s.card__points}
+            onClick={() => setShowEdit(!showEdit)}
+          >
             {svgPoints}
           </div>
           {showEdit && (
