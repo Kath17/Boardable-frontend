@@ -2,24 +2,28 @@ import * as React from "react";
 import s from "./BoardPage.module.css";
 import Card from "../Card";
 import PopUpEdit from "../PopUpEdit";
-import { useLoaderData } from "react-router-dom";
+import { redirect, useLoaderData } from "react-router-dom";
 import CardForm from "../CardForm";
+import { authProvider } from "../../auth";
+import { getCards } from "../../services/cards";
+import { getBoard } from "../../services/boards";
 
-async function loader() {
-  let urlGetCards = `/api/Kat2/boards/1/cards`;
-  let urlGetBoard = `/api/Kat2/boards/1`;
+async function loader({ request }) {
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+  const boardId = pathname.substring(pathname.lastIndexOf("/") + 1);
 
-  const [cardsResponse, boardResponse] = await Promise.all([
-    fetch(urlGetCards),
-    fetch(urlGetBoard),
-  ]);
+  if (!authProvider.isAuthenticated) {
+    let params = new URLSearchParams();
+    params.set("from", pathname);
+    return redirect("/login?" + params.toString());
+  }
 
-  const [cardsData, boardData] = await Promise.all([
-    cardsResponse.json(),
-    boardResponse.json(),
-  ]);
+  const username = localStorage.getItem("username");
+  const cards = await getCards(username, boardId);
+  const board = await getBoard(username, boardId);
 
-  return { cards: cardsData.cards, boardTitle: boardData.board.title };
+  return { cards, boardTitle: board.title };
 }
 
 export default function BoardPage() {
