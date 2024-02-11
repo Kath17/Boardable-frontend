@@ -20,8 +20,30 @@ export const authProvider = {
     if (response.ok) {
       const body = await response.json();
       authProvider.isAuthenticated = true;
-      authProvider.token = body.token;
-      window.localStorage.setItem(tokenKey, body.token);
+      authProvider.token = body.data.token;
+      window.localStorage.setItem(tokenKey, body.data.token);
+    } else {
+      const error = await response.json();
+      throw new Error(error);
+    }
+  },
+
+  async signup(username, password) {
+    const url = URL_BASE + "/signup";
+    const options = {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await fetch(url, options);
+    if (response.ok) {
+      const body = await response.json();
+      authProvider.isAuthenticated = true;
+      authProvider.token = body.data.token;
+      window.localStorage.setItem(tokenKey, body.data.token);
     } else {
       const error = await response.json();
       throw new Error(error);
@@ -30,6 +52,8 @@ export const authProvider = {
 
   logout() {
     window.localStorage.removeItem(tokenKey);
+    window.localStorage.removeItem("username");
+    window.localStorage.removeItem("isLoggedIn");
 
     authProvider.isAuthenticated = false;
     authProvider.token = null;
