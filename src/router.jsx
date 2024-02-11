@@ -17,9 +17,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        // path: "/boards",
         element: <MyBoards />,
-        loader: MyBoards.loader,
       },
       {
         path: "/boards/:boardId",

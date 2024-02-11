@@ -4,9 +4,7 @@ import s from "./App.module.css";
 import Header from "../Header";
 import { authProvider } from "../../auth";
 import { Outlet, redirect, useActionData } from "react-router-dom";
-import { createBoard, getBoards, getUser } from "../../temp";
-
-//export const PageContext = React.createContext();
+import { createBoard, getBoards } from "../../services/boards";
 
 async function loader({ request }) {
   if (!authProvider.isAuthenticated) {
@@ -15,18 +13,18 @@ async function loader({ request }) {
     return redirect("/login?" + params.toString());
   }
 
-  const [username, notes] = await Promise.all([getUser(), getBoards()]);
-  const activeNotes = notes.filter((note) => !note.deleted);
-  const deletedNotes = notes.filter((note) => note.deleted);
+  const username = localStorage.getItem("username");
+  const boards = await getBoards(username);
 
-  return { username, activeNotes, deletedNotes };
+  return { username, boards };
 }
 
-async function action({ request }) {
+async function action({ request, loaderData }) {
   let formData = await request.formData();
-  const noteData = Object.fromEntries(formData.entries());
+  const boardData = Object.fromEntries(formData.entries());
+  const { username } = loaderData;
   try {
-    await createBoard(noteData);
+    await createBoard(boardData, username);
     return redirect("/");
   } catch (error) {
     return { error: error.message };
