@@ -50,6 +50,27 @@ export const authProvider = {
     }
   },
 
+  async deleteUser(username) {
+    const url = URL_BASE + `/delete/${username}`;
+    const token = window.localStorage.getItem(tokenKey);
+
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${token}`,
+      },
+    };
+
+    const response = await fetch(url, options);
+    if (response.ok) {
+      authProvider.isAuthenticated = true;
+    } else {
+      const error = await response.json();
+      throw new Error(error);
+    }
+  },
+
   async signup(username, password) {
     const url = URL_BASE + "/signup";
     const options = {
@@ -62,6 +83,7 @@ export const authProvider = {
 
     const response = await fetch(url, options);
     if (response.ok) {
+      window.localStorage.setItem("username", username);
       const body = await response.json();
       authProvider.isAuthenticated = true;
       authProvider.token = body.data.token;

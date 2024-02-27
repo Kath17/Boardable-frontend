@@ -1,7 +1,7 @@
 import * as React from "react";
 import s from "./Account.module.css";
 import Button from "../Button";
-import { Form, redirect, useLoaderData } from "react-router-dom";
+import { Form, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { authProvider } from "../../auth";
 import { getUser } from "../../services/users";
 
@@ -46,12 +46,25 @@ export default function Account() {
   const [currentName, setCurrentName] = React.useState(user.name || "");
   const [currentEmail, setCurrentEmail] = React.useState(user.email || "");
   const [emailError, setEmailError] = React.useState("");
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setCurrentEmail(e.target.value);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(e.target.value)) setEmailError("Invalid email format");
     else setEmailError("");
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await authProvider.deleteUser(user.username);
+      localStorage.removeItem("username");
+      localStorage.removeItem("isLoggedIn");
+
+      navigate("/signup");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
   };
 
   return (
@@ -110,7 +123,12 @@ export default function Account() {
         <Button type="submit" size="lg">
           Update
         </Button>
-        <Button size="lg" variant="delete">
+        <Button
+          type="button"
+          size="lg"
+          variant="delete"
+          onClick={handleDeleteAccount}
+        >
           Delete my account
         </Button>
       </Form>

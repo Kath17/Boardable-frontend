@@ -4,7 +4,7 @@ import s from "./App.module.css";
 import Header from "../Header";
 import { authProvider } from "../../auth";
 import { Outlet, redirect, useActionData } from "react-router-dom";
-import { createBoard, getBoards } from "../../services/boards";
+import { getBoards } from "../../services/boards";
 
 async function loader({ request }) {
   if (!authProvider.isAuthenticated) {
@@ -19,12 +19,8 @@ async function loader({ request }) {
   return { username, boards };
 }
 
-async function action({ request, loaderData }) {
-  let formData = await request.formData();
-  const boardData = Object.fromEntries(formData.entries());
-  const { username } = loaderData;
+async function action() {
   try {
-    await createBoard(boardData, username);
     return redirect("/");
   } catch (error) {
     return { error: error.message };
@@ -35,7 +31,6 @@ export default function App() {
   const actionData = useActionData();
 
   return (
-    // <div className={s.container}>
     <div>
       <Header />
       <main className={s.main}>

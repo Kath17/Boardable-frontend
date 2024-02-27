@@ -33,19 +33,26 @@ function Header() {
 
   const navigate = useNavigate();
 
-  const handleAccountClick = () => {
-    navigate("/account");
-  };
-
   return (
     <div className={s.header__background}>
       <div className={s.header}>
-        <div className={s.logo}>
+        <div
+          onClick={() => {
+            navigate("/");
+            navigate(0);
+          }}
+          className={s.logo}
+        >
           {svgLogo}
           <h1 className={s.header__title}>Boardable</h1>
         </div>
         <div className={s.buttons}>
-          <Button variant="outline" onClick={handleAccountClick}>
+          <Button
+            variant="outline"
+            onClick={() => {
+              navigate("/account");
+            }}
+          >
             My Account
           </Button>
 
