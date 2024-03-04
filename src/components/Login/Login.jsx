@@ -18,7 +18,6 @@ async function action({ request }) {
   try {
     await authProvider.login(username, password);
     localStorage.setItem("username", username);
-    localStorage.setItem("isLoggedIn", "true");
   } catch (error) {
     return {
       error: "Invalid login attempt",
